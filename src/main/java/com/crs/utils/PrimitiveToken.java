@@ -16,9 +16,6 @@ public class PrimitiveToken extends Token {
 
     private Float floatValue;
 
-    public PrimitiveToken() {
-    }
-
     public PrimitiveToken(String key, String jsonBody) {
         super(key, jsonBody);
     }

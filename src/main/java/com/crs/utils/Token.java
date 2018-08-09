@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by crs on 8/8/18.
  */
-public abstract class Token {
+public class Token {
 
     protected String key;
 
@@ -32,5 +32,10 @@ public abstract class Token {
 
     public void setJsonBody(String jsonBody) {
         this.jsonBody = jsonBody;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("key: %s, jsonBody: %s", this.key, this.jsonBody);
     }
 }

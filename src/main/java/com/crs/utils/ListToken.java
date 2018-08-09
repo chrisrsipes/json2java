@@ -7,9 +7,6 @@ public class ListToken extends Token {
 
     private String inferredType;
 
-    public ListToken() {
-    }
-
     public ListToken(String key, String jsonBody) {
         super(key, jsonBody);
     }
