@@ -1,6 +1,7 @@
 package com.crs.utils;
 
 import com.crs.enums.TokenType;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,12 +11,9 @@ import java.util.List;
  */
 public class ObjectToken extends Token {
 
-    private List<String> fields = new ArrayList<String>();
+    private List<ImmutablePair<TokenType, Token>> childTokens = new ArrayList<ImmutablePair<TokenType, Token>>();
 
     private List<String> inferredTypes = new ArrayList<String>();
-
-    public ObjectToken() {
-    }
 
     public ObjectToken(String key, String jsonBody) {
         super(key, jsonBody);

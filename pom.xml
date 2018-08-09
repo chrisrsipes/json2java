@@ -35,5 +35,12 @@
             </plugin>
         </plugins>
     </build>
+    <dependencies>
+        <dependency>
+            <groupId>com.emerge</groupId>
+            <artifactId>emerge-aws-lambda</artifactId>
+            <version>1.0</version>
+        </dependency>
+    </dependencies>
 
 </project>

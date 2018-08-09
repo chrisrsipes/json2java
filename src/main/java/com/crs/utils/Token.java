@@ -1,5 +1,9 @@
 package com.crs.utils;
 
+import com.crs.enums.TokenType;
+
+import java.util.List;
+
 /**
  * Created by crs on 8/8/18.
  */
@@ -9,11 +13,7 @@ public abstract class Token {
 
     protected String jsonBody;
 
-    public Token() {
-
-    }
-
-    public Token(String key, String jsonBody) {
+    protected Token(String key, String jsonBody) {
         this.key = key;
         this.jsonBody = jsonBody;
     }
