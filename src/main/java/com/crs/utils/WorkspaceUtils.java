@@ -30,4 +30,16 @@ public class WorkspaceUtils {
 
         return result;
     }
+
+    /**
+     * Repeat string <b>str</b> <b>times</b> time.
+     * @param str string to repeat
+     * @param times repeat str times time
+     * @return generated string
+     *
+     * adapted from https://gist.github.com/umidjons/10859940
+     */
+    public static String repeat(String str, int times) {
+        return (times > 0) ? new String(new char[times]).replace("\0", str) : "";
+    }
 }
