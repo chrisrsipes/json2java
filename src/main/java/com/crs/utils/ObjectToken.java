@@ -1,5 +1,7 @@
 package com.crs.utils;
 
+import com.crs.enums.TokenType;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,16 @@ public class ObjectToken extends Token {
 
     public ObjectToken(String key, String jsonBody) {
         super(key, jsonBody);
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "Key: %s, type: %s, body: %s",
+                this.key,
+                TokenType.OBJECT.toString(),
+                this.jsonBody
+        );
     }
 
 }

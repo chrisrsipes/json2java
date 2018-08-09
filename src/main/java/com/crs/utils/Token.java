@@ -3,11 +3,11 @@ package com.crs.utils;
 /**
  * Created by crs on 8/8/18.
  */
-public class Token {
+public abstract class Token {
 
-    private String key;
+    protected String key;
 
-    private String jsonBody;
+    protected String jsonBody;
 
     public Token() {
 
