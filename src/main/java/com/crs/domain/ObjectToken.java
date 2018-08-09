@@ -45,14 +45,20 @@ public class ObjectToken extends Token {
 
             // 2 characters for quotes around the key, the key itself, and the length of the body
             endInd = token.getJsonBody().length() + token.getKey().length() + 2 + startInd;
-            startInd = endInd + 1;
 
+            this.childTokens.add(new ImmutablePair<TokenType, Token>(token.getTokenType(), token));
+            this.childTokenPositions.add(new ImmutablePair<Integer, Integer>(startInd, endInd));
+
+            startInd = endInd + 1;
             while (startInd < jsonBodyLength && (jsonBody.charAt(startInd) == ',' || jsonBody.charAt(startInd) == '}')) {
                 ++startInd;
             }
 
             System.out.println(token);
         }
+
+        System.out.println(this.childTokens);
+        System.out.println(this.childTokenPositions);
 
     }
 
