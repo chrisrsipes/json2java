@@ -13,10 +13,11 @@ public class ObjectToken extends Token {
 
     private List<ImmutablePair<TokenType, Token>> childTokens = new ArrayList<ImmutablePair<TokenType, Token>>();
 
-    private List<String> inferredTypes = new ArrayList<String>();
+    private List<ImmutablePair<Integer, Integer>> childTokenPositions = new ArrayList<ImmutablePair<Integer, Integer>>();
 
     public ObjectToken(String key, String jsonBody) {
         super(key, jsonBody);
+        parseChildTokens();
     }
 
     @Override
@@ -27,6 +28,27 @@ public class ObjectToken extends Token {
                 TokenType.OBJECT.toString(),
                 this.jsonBody
         );
+    }
+
+    private void parseChildTokens() {
+        int jsonBodyLength = this.jsonBody.length();
+        int startInd = 1;
+        int endInd = -1;
+
+        while (startInd < jsonBodyLength && endInd < jsonBodyLength) {
+            Token token = JsonUtils.getInstance().getCurrentToken(this.jsonBody.substring(startInd));
+            // "key":body,
+            // len(key) + 2 + len(body)
+            endInd = token.getJsonBody().length() + token.getKey().length() + 2 + startInd;
+            startInd = endInd + 1;
+
+            while (startInd < jsonBodyLength && (jsonBody.charAt(startInd) == ',' || jsonBody.charAt(startInd) == '}')) {
+                ++startInd;
+            }
+
+            System.out.println(token);
+        }
+
     }
 
 }

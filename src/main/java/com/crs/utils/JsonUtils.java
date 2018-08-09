@@ -74,7 +74,7 @@ public class JsonUtils {
         Integer lastQuote = null;
 
         if (jsonString == null || jsonString.length() == 0 || jsonString.charAt(0) != '"') {
-            throw new InvalidTokenException("First character of stringified token is expected to be double quotes");
+            throw new InvalidTokenException("First character of stringified token is expected to be double quotes, found " + jsonString.charAt(0));
         } else {
             firstQuote = 0;
         }
@@ -109,16 +109,25 @@ public class JsonUtils {
 
         Token token = null;
 
+        // capture the surrounding parentheses/quotes/braces if applicable
         switch (tokenType) {
             case OBJECT:
                 token = new ObjectToken(key, jsonString.substring(bodyStart, bodyEnd + 1));
                 break;
+            case LIST:
+                token = new ListToken(key, jsonString.substring(bodyStart, bodyEnd + 1));
+                break;
+            case STRING:
+                token = new StringToken(key, jsonString.substring(bodyStart, bodyEnd + 1));
+                break;
+            case PRIMITIVE:
+                token = new PrimitiveToken(key, jsonString.substring(bodyStart, bodyEnd));
+                break;
         }
 
-        System.out.println(token);
+//        System.out.println(token);
 
-
-        return null;
+        return token;
     }
 
     public int getTokenBodyEnd(String jsonString, int startInd, TokenType type) {
@@ -127,6 +136,15 @@ public class JsonUtils {
         switch (type) {
             case OBJECT:
                 endInd = getObjectTokenBodyEnd(jsonString, startInd);
+                break;
+            case LIST:
+                endInd = getListTokenBodyEnd(jsonString, startInd);
+                break;
+            case STRING:
+                endInd = getStringTokenBodyEnd(jsonString, startInd);
+                break;
+            case PRIMITIVE:
+                endInd = getPrimitiveTokenBodyEnd(jsonString, startInd);
                 break;
             default:
                 endInd = -1;
@@ -160,6 +178,88 @@ public class JsonUtils {
                 doubleQuotesOpen = false;
             }
 
+        }
+
+        return endInd;
+    }
+
+    public int getListTokenBodyEnd(String jsonString, int startInd) {
+        int strLen = jsonString.length();
+
+        // should be able to look for at least one character ahead for closing brace
+        if (startInd + 1 >= strLen) {
+            throw new InvalidTokenException("Reached end of file trying to find closing square bracket");
+        }
+
+        if (jsonString.charAt(startInd) != '[') {
+            throw new InvalidTokenException("Expected start index to be `[` for list tokens");
+        }
+
+        boolean doubleQuotesOpen = false;
+        int endInd = -1;
+
+        for (int ind = startInd + 1; ind < strLen; ind++) {
+            if (!doubleQuotesOpen && jsonString.charAt(ind) == ']') {
+                endInd = ind;
+                break;
+            } else if (!doubleQuotesOpen && jsonString.charAt(ind) == '"') {
+                doubleQuotesOpen = true;
+            } else if (doubleQuotesOpen && jsonString.charAt(ind) == '"') {
+                doubleQuotesOpen = false;
+            }
+
+        }
+
+        return endInd;
+    }
+
+    public int getStringTokenBodyEnd(String jsonString, int startInd) {
+        int strLen = jsonString.length();
+
+        // should be able to look for at least one character ahead for closing quote
+        if (startInd + 1 >= strLen) {
+            throw new InvalidTokenException("Reached end of file trying to find closing double quotes");
+        }
+
+        if (jsonString.charAt(startInd) != '"') {
+            throw new InvalidTokenException("Expected start index to be `\"` for string tokens");
+        }
+
+        int endInd = -1;
+
+        for (int ind = startInd + 1; ind < strLen; ind++) {
+            if (jsonString.charAt(ind) == '"') {
+                if (ind > 1 && jsonString.charAt(ind - 1) == '\\') {
+                    continue;
+                } else {
+                    endInd = ind;
+                    break;
+                }
+            }
+        }
+
+        return endInd;
+    }
+
+    public int getPrimitiveTokenBodyEnd(String jsonString, int startInd) {
+        int strLen = jsonString.length();
+
+        boolean decimalFound = false;
+        int endInd = -1;
+
+        for (int ind = startInd; ind < strLen; ind++) {
+            if (Character.isDigit(jsonString.charAt(ind))) {
+                continue;
+            } else if (jsonString.charAt(ind) == '.') {
+                if (decimalFound) {
+                    throw new InvalidTokenException("Error parsing primitive value");
+                } else {
+                    decimalFound = true;
+                }
+            } else {
+                endInd = ind;
+                break;
+            }
         }
 
         return endInd;
