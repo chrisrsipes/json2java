@@ -12,6 +12,8 @@ public class DefaultProcessor implements Callable {
 
     private String jsonString;
 
+    private String trimmedJsonString;
+
     public DefaultProcessor(String jsonString) {
 
         if (jsonString == null) {
@@ -22,8 +24,11 @@ public class DefaultProcessor implements Callable {
     }
 
     public Object call() throws Exception {
-        System.out.println(this.jsonString);
-        System.out.println(JsonUtils.getInstance().removeWhitespace(this.jsonString));
+
+        this.trimmedJsonString = JsonUtils.getInstance().removeWhitespace(this.jsonString);
+        System.out.println(this.trimmedJsonString);
+
+        JsonUtils.getInstance().getCurrentToken(this.trimmedJsonString.substring(1));
         return null;
     }
 }
