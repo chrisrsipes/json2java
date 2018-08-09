@@ -3,7 +3,7 @@ package com.crs.processor;
 import com.crs.config.Constants;
 import com.crs.exception.InvalidProcessorException;
 import com.crs.utils.JsonUtils;
-import com.crs.utils.ObjectToken;
+import com.crs.domain.ObjectToken;
 
 import java.util.concurrent.Callable;
 

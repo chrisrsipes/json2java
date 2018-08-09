@@ -1,7 +1,6 @@
-package com.crs.utils;
+package com.crs.domain;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.crs.enums.TokenType;
 
 /**
  * Created by crs on 8/8/18.
@@ -18,6 +17,11 @@ public class PrimitiveToken extends Token {
 
     public PrimitiveToken(String key, String jsonBody) {
         super(key, jsonBody);
+    }
+
+    public TokenType getTokenType() {
+        // @TODO: make this dynamic based on field filled in
+        return TokenType.PRIMITIVE;
     }
 
 }

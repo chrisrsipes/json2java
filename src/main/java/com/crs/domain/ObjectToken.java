@@ -1,6 +1,7 @@
-package com.crs.utils;
+package com.crs.domain;
 
 import com.crs.enums.TokenType;
+import com.crs.utils.JsonUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.util.ArrayList;
@@ -30,6 +31,10 @@ public class ObjectToken extends Token {
         );
     }
 
+    public TokenType getTokenType() {
+        return TokenType.OBJECT;
+    }
+
     private void parseChildTokens() {
         int jsonBodyLength = this.jsonBody.length();
         int startInd = 1;
@@ -37,8 +42,8 @@ public class ObjectToken extends Token {
 
         while (startInd < jsonBodyLength && endInd < jsonBodyLength) {
             Token token = JsonUtils.getInstance().getCurrentToken(this.jsonBody.substring(startInd));
-            // "key":body,
-            // len(key) + 2 + len(body)
+
+            // 2 characters for quotes around the key, the key itself, and the length of the body
             endInd = token.getJsonBody().length() + token.getKey().length() + 2 + startInd;
             startInd = endInd + 1;
 
