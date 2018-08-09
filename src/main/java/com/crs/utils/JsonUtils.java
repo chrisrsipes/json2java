@@ -1,5 +1,6 @@
 package com.crs.utils;
 
+import com.crs.enums.TokenType;
 import com.crs.exception.InvalidTokenException;
 
 import java.util.ArrayList;
@@ -48,6 +49,26 @@ public class JsonUtils {
         return c == ' ' || c == '\n' || c == '\t' || c == '\r';
     }
 
+    public TokenType getTokenType(char c) {
+        TokenType type;
+
+        switch(c) {
+            case '{':
+                type = TokenType.OBJECT;
+                break;
+            case '[':
+                type = TokenType.LIST;
+                break;
+            case '"':
+                type = TokenType.STRING;
+                break;
+            default:
+                type = Character.isDigit(c) ? TokenType.PRIMITIVE : TokenType.UNKNOWN;
+        }
+
+        return type;
+    }
+
     public Token getCurrentToken(String jsonString) {
         Integer firstQuote = null;
         Integer lastQuote = null;
@@ -76,13 +97,71 @@ public class JsonUtils {
         }
 
         String key = jsonString.substring(firstQuote + 1, lastQuote);
-        System.out.println(key);
 
         if (jsonString.charAt(lastQuote + 1) != ':') {
             throw new InvalidTokenException(String.format("Missing colon following key %s", key));
         }
 
+        int bodyStart = lastQuote + 2;
+        TokenType tokenType = getTokenType(jsonString.charAt(bodyStart));
+
+        int bodyEnd = getTokenBodyEnd(jsonString, bodyStart, tokenType);
+
+        Token token = null;
+
+        switch (tokenType) {
+            case OBJECT:
+                token = new ObjectToken(key, jsonString.substring(bodyStart, bodyEnd + 1));
+                break;
+        }
+
+        System.out.println(token);
+
 
         return null;
+    }
+
+    public int getTokenBodyEnd(String jsonString, int startInd, TokenType type) {
+        int endInd;
+
+        switch (type) {
+            case OBJECT:
+                endInd = getObjectTokenBodyEnd(jsonString, startInd);
+                break;
+            default:
+                endInd = -1;
+        }
+
+        return endInd;
+    }
+
+    public int getObjectTokenBodyEnd(String jsonString, int startInd) {
+        int strLen = jsonString.length();
+
+        // should be able to look for at least one character ahead for closing brace
+        if (startInd + 1 >= strLen) {
+            throw new InvalidTokenException("Reached end of file trying to find closing curly brace");
+        }
+
+        if (jsonString.charAt(startInd) != '{') {
+            throw new InvalidTokenException("Expected start index to be `{` for object tokens");
+        }
+
+        boolean doubleQuotesOpen = false;
+        int endInd = -1;
+
+        for (int ind = startInd + 1; ind < strLen; ind++) {
+            if (!doubleQuotesOpen && jsonString.charAt(ind) == '}') {
+                endInd = ind;
+                break;
+            } else if (!doubleQuotesOpen && jsonString.charAt(ind) == '"') {
+                doubleQuotesOpen = true;
+            } else if (doubleQuotesOpen && jsonString.charAt(ind) == '"') {
+                doubleQuotesOpen = false;
+            }
+
+        }
+
+        return endInd;
     }
 }
