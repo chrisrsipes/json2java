@@ -31,11 +31,24 @@ public abstract class ParentToken extends Token {
         int startInd = 1;
         int endInd = -1;
 
+        boolean isListToken = false;
+
+        try {
+            // try to cast to see if it is a ListToken
+            ListToken listToken = (ListToken) this;
+            isListToken = true;
+        } catch (ClassCastException e) {
+        }
+
         while (startInd < jsonBodyLength && endInd < jsonBodyLength) {
             Token token = JsonUtils.getInstance().getCurrentToken(this.jsonBody.substring(startInd));
 
-            // 2 characters for quotes around the key, the key itself, and the length of the body
-            endInd = token.getJsonBody().length() + token.getKey().length() + 2 + startInd;
+            endInd = startInd + token.getJsonBody().length();
+
+            // if this parent token is not a list, 2 characters for quotes around the key, the key itself, and the length of the body
+            if (!isListToken) {
+                endInd += token.getKey().length() + 2;
+            }
 
             this.childTokens.add(new ImmutablePair<TokenType, Token>(token.getTokenType(), token));
             this.childTokenPositions.add(new ImmutablePair<Integer, Integer>(startInd, endInd));

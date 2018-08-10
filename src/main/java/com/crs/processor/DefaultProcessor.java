@@ -73,11 +73,24 @@ public class DefaultProcessor implements Callable {
                 System.out.println(String.format("%s%s[%s] %s: %s", offset, prefix, stringToken.getTokenType().toString(), stringToken.getKey(), stringToken.getValue()));
                 break;
             case PRIMITIVE:
-                PrimitiveToken primitiveToken = (PrimitiveToken) token;
-                System.out.println(String.format("%s%s[%s] %s: %s", offset, prefix, primitiveToken.getTokenType().toString(), primitiveToken.getKey(), "not implemented"));
+                PrimitiveToken primitiveToken1 = (PrimitiveToken) token;
+                System.out.println(String.format("%s%s[%s] %s: %s", offset, prefix, primitiveToken1.getTokenType().toString(), primitiveToken1.getKey(), primitiveToken1.getValue()));
+                break;
+            case PRIMITIVE_INT:
+                PrimitiveToken primitiveToken2 = (PrimitiveToken) token;
+                System.out.println(String.format("%s%s[%s] %s: %s", offset, prefix, primitiveToken2.getTokenType().toString(), primitiveToken2.getKey(), primitiveToken2.getValue()));
+                break;
+            case PRIMITIVE_LONG:
+                PrimitiveToken primitiveToken3 = (PrimitiveToken) token;
+                System.out.println(String.format("%s%s[%s] %s: %s", offset, prefix, primitiveToken3.getTokenType().toString(), primitiveToken3.getKey(), primitiveToken3.getValue()));
+                break;
+            case PRIMITIVE_DOUBLE:
+                PrimitiveToken primitiveToken4 = (PrimitiveToken) token;
+                System.out.println(String.format("%s%s[%s] %s: %s", offset, prefix, primitiveToken4.getTokenType().toString(), primitiveToken4.getKey(), primitiveToken4.getValue()));
                 break;
             default:
                 System.out.println(String.format("%s%s[%s] %s: %s", offset, prefix, token.getTokenType(), "not implemented"));
+                break;
 
 
         }

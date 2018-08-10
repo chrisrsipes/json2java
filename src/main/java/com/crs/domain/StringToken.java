@@ -12,12 +12,7 @@ public class StringToken extends Token {
 
     public StringToken(String key, String jsonBody) {
         super(key, jsonBody);
-
-        if (jsonBody.charAt(0) != '"' || jsonBody.charAt(jsonBody.length() - 1) != '"') {
-            throw new InvalidTokenException("Expected jsonBody to contain quotations");
-        }
-
-        this.value = jsonBody.substring(1, jsonBody.length() - 1);
+        this.parseValue();
     }
 
     public TokenType getTokenType() {
@@ -26,5 +21,13 @@ public class StringToken extends Token {
 
     public String getValue() {
         return value;
+    }
+
+    private void parseValue() {
+        if (jsonBody.charAt(0) != '"' || jsonBody.charAt(jsonBody.length() - 1) != '"') {
+            throw new InvalidTokenException("Expected jsonBody to contain quotations");
+        }
+
+        this.value = jsonBody.substring(1, jsonBody.length() - 1);
     }
 }
