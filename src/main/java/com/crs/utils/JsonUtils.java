@@ -83,11 +83,7 @@ public class JsonUtils {
             Integer firstQuote = 0;
             Integer lastQuote = null;
 
-            int currentInd = firstQuote;
-
-            if (jsonString.charAt(0) == '"') {
-                ++currentInd;
-            }
+            int currentInd = firstQuote + 1;
 
             while (lastQuote == null && currentInd + 1< jsonString.length()) {
                 if (jsonString.charAt(currentInd) == '"') {
