@@ -5,5 +5,5 @@ package com.crs.config;
  */
 public class Constants {
 
-    public static final String ROOT_OBJECT_KEY = "ROOT";
+    public static final String ROOT_OBJECT_KEY = "root";
 }
