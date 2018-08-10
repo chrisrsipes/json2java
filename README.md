@@ -1,5 +1,11 @@
 # json2java
 
+## Pre-requisites
+
+- Valid Maven installation (https://www.baeldung.com/install-maven-on-windows-linux-mac)
+  - for OS X, it's easiest to run `brew install maven`
+- Java 1.8+
+
 ## Build Instructions
 
 `mvn clean install`
@@ -10,7 +16,44 @@
 
 ## Notes
 
-Still a work in progress, only core logic has been implemented.
+*Still a work in progress, only core logic has been implemented.*
+
+The currently supported "Token"s is considered to be any JSON Object, List / Array, int, long, float, double, or string of a JSON object, and it's respective value(s).  
+
+
+### Packages
+
+#### config
+
+Holds main class and Constant file.  The main class currently loads a hard-coded JSON file, initalizes the DefaultProcessor, and calls it to tokenize the JSON and produce java code from the tokens.
+
+### domain
+
+Holds Token classes representing the different JSON tokens that are represented within json2java.  
+
+All other *Token classes extend Token.java, which represents the key and body (still in JSON) of the token.
+
+"ParentToken"s additionally capture information about Tokens that contain Tokens within them, namely objects (by key) and lists (by index), extends Token.java.
+
+PrimitiveToken and StringToken are concrete implementations of Token that resolve values.
+
+ObjectToken and ListToken are concrete implemtentations of ParentToken, and they resolve their own token and their child tokens when initialized.
+
+### enums
+
+Currently only contains the token types.  There are sub-types of PRIMITIVE, for which there are different types but not matching classes.  The PrimitiveToken class handles the different subtypes.
+
+### exception
+
+Custom exceptions that can be thrown during processing.
+
+### processor
+
+Currently only contains a regular implementation that implements Callable.  May be able to be simplified without processor package.
+
+### utils
+
+Contains utilities for reading/parsing JSON, generating Java code, working with tokenized JSON, and managing the workspace.
 
 ## Usage example
 
