@@ -27,7 +27,7 @@ The currently supported "Token"s is considered to be any JSON Object, List / Arr
 
 Holds main class and Constant file.  The main class currently loads a hard-coded JSON file, initalizes the DefaultProcessor, and calls it to tokenize the JSON and produce java code from the tokens.
 
-### domain
+#### domain
 
 Holds Token classes representing the different JSON tokens that are represented within json2java.  
 
@@ -39,19 +39,19 @@ PrimitiveToken and StringToken are concrete implementations of Token that resolv
 
 ObjectToken and ListToken are concrete implemtentations of ParentToken, and they resolve their own token and their child tokens when initialized.
 
-### enums
+#### enums
 
 Currently only contains the token types.  There are sub-types of PRIMITIVE, for which there are different types but not matching classes.  The PrimitiveToken class handles the different subtypes.
 
-### exception
+#### exception
 
 Custom exceptions that can be thrown during processing.
 
-### processor
+#### processor
 
 Currently only contains a regular implementation that implements Callable.  May be able to be simplified without processor package.
 
-### utils
+#### utils
 
 Contains utilities for reading/parsing JSON, generating Java code, working with tokenized JSON, and managing the workspace.
 
